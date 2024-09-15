@@ -18,3 +18,11 @@ https://apex.oracle.com/en/
 
 **Server:** SQL, JavaScript, Oracle Apex
 
+
+## Authors
+
+- [@Alfredo-jalt](https://www.github.com/Alfredo-jalt)
+
+- [@SEB-HDEZ-G](https://www.github.com/SEB-HDEZ-G)
+
+- [@JuanPabloDP](https://www.github.com/JuanPabloDP)
