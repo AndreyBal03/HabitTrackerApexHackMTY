@@ -1,0 +1,1137 @@
+---
+# ====== Page: My habits =====================================
+id: 6
+identification: 
+  name: My habits
+  alias: MY-HABITS
+  title: My habits
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    apex.actions.add([{
+        name: "delete",
+        action: (event, element, args) => {
+            apex.items.P2_ACTION_ID.value = args.id;
+            apex.event.trigger(document, 'action-delete');
+        }
+    }]);
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: New habit ===================================
+  id: 38727706071579953636
+  identification: 
+    name: New habit
+    title: New habit
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SM_HABITS
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_04
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Inline Dialog
+    template-options: 
+    - '#DEFAULT#'
+    - js-dialog-size600x400
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: false
+
+- # ====== Region: Timeline ====================================
+  id: 38810027500500851819
+  identification: 
+    name: Timeline
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+       p.id,
+       p.created_by AS user_name,
+       p.name AS name_text,
+       p.description AS description_text,
+       p.status AS status_text,
+       p.importance AS importance_text,
+       p.frecuency AS frecuency_text,
+       p.picture,
+       p.file_mime,
+      
+       apex_util.get_since(p.created) habit_date
+      
+       from SM_HABITS p
+       where p.user_id = APEX_UTIL.GET_CURRENT_USER_ID
+      
+       order by p.created desc
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - t-Chat
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: timeline
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 38810027606062851820
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    card: 
+      primary-key-column-1: ID
+
+    title: 
+      advanced-formatting: false
+      column: NAME_TEXT
+
+    subtitle: 
+      advanced-formatting: false
+      column: DESCRIPTION_TEXT
+
+    body: 
+      advanced-formatting: true
+      html-expression: |
+        Frequency: &FRECUENCY_TEXT. </br>
+        Importance: &IMPORTANCE_TEXT.
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Initials
+      icon-column: NAME_TEXT
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: BLOB Column
+      blob-column: PICTURE
+      position: First
+      appearance: Widescreen
+      sizing: Cover
+      css-classes: 
+      - selectDisable
+      image-description: '&STATUS_TEXT.'
+
+    blob-attributes: 
+      mime-type-column: FILE_MIME
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: Delete ======================================
+      id: 38445067541969585536
+      identification: 
+        type: Button
+        label: Delete
+
+      layout: 
+        position: Secondary
+        sequence: 10
+
+      link: 
+        type: Redirect to URL
+        target: '#action$delete?id=&ID.'
+
+      appearance: 
+        display-type: Icon
+        icon: fa-trash-o
+        hot: false
+
+      server-side-condition: 
+        type: Expression
+        language: PL/SQL
+        pl/sql-expression: ':USER_NAME=:APP_USER'
+        execute-condition: For Each Row
+
+page-items: 
+- # ====== Page Item: P2_ACTION_ID =============================
+  id: 38445067669323585537
+  identification: 
+    name: P2_ACTION_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Timeline # 38810027500500851819
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_ID ====================================
+  id: 38727706231949953638
+  identification: 
+    name: P6_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: New habit # 38727706071579953636
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_NAME ==================================
+  id: 38727706366952953639
+  identification: 
+    name: P6_NAME
+    type: Text Field
+
+  label: 
+    label: Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_DESCRIPTION ===========================
+  id: 38727706499206953640
+  identification: 
+    name: P6_DESCRIPTION
+    type: Textarea
+
+  label: 
+    label: Description
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 50
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 400
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: DESCRIPTION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_STATUS ================================
+  id: 38727706562397953641
+  identification: 
+    name: P6_STATUS
+    type: Select One
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  layout: 
+    sequence: 80
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Public;Public,Private;Private'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_IMPORTANCE ============================
+  id: 38727706637607953642
+  identification: 
+    name: P6_IMPORTANCE
+    type: Select One
+
+  label: 
+    label: Importance
+    alignment: Left
+
+  settings: 
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  layout: 
+    sequence: 70
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Low;Low,Medium;Medium,High;High'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: IMPORTANCE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_FRECUENCY =============================
+  id: 38727706710922953643
+  identification: 
+    name: P6_FRECUENCY
+    type: Select One
+
+  label: 
+    label: Frecuency
+    alignment: Left
+
+  settings: 
+    fetch-on-search: false
+
+  search: 
+    match-type: Contains
+    case-sensitive: false
+    minimum-characters: 0
+
+  layout: 
+    sequence: 60
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Daily;Daily,Weekly;Weekly,Monthly;Monthly'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: FRECUENCY
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_START_DATE ============================
+  id: 38727706856718953644
+  identification: 
+    name: P6_START_DATE
+    type: Date Picker
+
+  label: 
+    label: Start Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 90
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: START_DATE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_END_DATE ==============================
+  id: 38727706918558953645
+  identification: 
+    name: P6_END_DATE
+    type: Date Picker
+
+  label: 
+    label: End Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 100
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: END_DATE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_PICTURE ===============================
+  id: 38810026136871851805
+  identification: 
+    name: P6_PICTURE
+    type: File Upload
+
+  label: 
+    label: Picture
+    alignment: Left
+
+  display: 
+    display-as: Block Dropzone
+    dropzone-title: Share a picture...
+    display-download-link: true
+    content-disposition: Attachment
+    capture-using: NONE
+
+  storage:: 
+    type: BLOB column specified in Item Source attribute
+    mime-type-column: FILE_MIME
+    filename-column: FILE_NAME
+    file-types: image/*
+    maximum-file-size: 10000
+
+  layout: 
+    sequence: 20
+    region: New habit # 38727706071579953636
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: PICTURE
+    data-type: BLOB
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_FILE_MIME =============================
+  id: 38810027320156851817
+  identification: 
+    name: P6_FILE_MIME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 110
+    region: New habit # 38727706071579953636
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: FILE_MIME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_FILE_NAME =============================
+  id: 38810027409019851818
+  identification: 
+    name: P6_FILE_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 120
+    region: New habit # 38727706071579953636
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: FILE_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_USER_ID ===============================
+  id: 38835918683828694102
+  identification: 
+    name: P6_USER_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: New habit # 38727706071579953636
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New habit # 38727706071579953636
+    column: USER_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: APEX_UTIL.GET_CURRENT_USER_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: New_habit ===================================
+  id: 38810026293989851806
+  identification: 
+    button-name: New_habit
+    label: New Habit
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: AFTER_LOGO
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    css-classes: 
+    - new-post-button
+    icon: fa-plus
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: Save ========================================
+  id: 38810026505291851809
+  identification: 
+    button-name: Save
+    label: Save
+
+  layout: 
+    sequence: 100
+    region: New habit # 38727706071579953636
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--large
+    - t-Button--stretch
+    css-classes: 
+    - post-button
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+    database-action: SQL INSERT action
+
+dynamic-actions: 
+- # ====== Dynamic Action: action-delete =======================
+  id: 38445067787858585538
+  identification: 
+    name: action-delete
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Custom
+    custom-event: action-delete
+    selection-type: JavaScript Expression
+    javascript-expression: document
+
+  actions: 
+  - # ====== Action: DELETE – Confirm dialog =====================
+    id: 38445067842565585539
+    identification: 
+      name: DELETE – Confirm dialog
+      action: Confirm
+
+    settings: 
+      title: Are you Sure?
+      message: You are about to delete this post. Are you sure?
+      style: Default
+
+    execution: 
+      sequence: 10
+      event: action-delete # 38445067787858585538
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: DELETE – do database work ===================
+    id: 38445067989401585540
+    identification: 
+      name: DELETE – do database work
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        delete from SM_REACTIONS where POST_ID = :P2_ACTION_ID and created_by=:APP_USER;
+        delete from SM_HABITS where id=:P2_ACTION_ID and created_by=:APP_USER;
+      items-to-submit: 
+      - P2_ACTION_ID
+
+    execution: 
+      sequence: 20
+      event: action-delete # 38445067787858585538
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: DELETE – remove post in UI ==================
+    id: 38445068073789585541
+    identification: 
+      name: DELETE – remove post in UI
+      action: Execute JavaScript Code
+
+    settings: 
+      code: $('[data-id='+apex.items.P2_ACTION_ID.value+']').remove();
+
+    execution: 
+      sequence: 30
+      event: action-delete # 38445067787858585538
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Open new habit ======================
+  id: 38810026321027851807
+  identification: 
+    name: Open new habit
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: New_habit # 38810026293989851806
+
+  actions: 
+  - # ====== Action: Open Region =================================
+    id: 38810026471854851808
+    identification: 
+      action: Open Region
+
+    affected-elements: 
+      selection-type: Region
+      region: New habit # 38727706071579953636
+
+    execution: 
+      sequence: 10
+      event: Open new habit # 38810026321027851807
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Submit habit ========================
+  id: 38810026682374851810
+  identification: 
+    name: Submit habit
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Save # 38810026505291851809
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: |
+      apex.item('P6_PICTURE').value.length>0 ||
+      apex.item('P1_NAME').value.length>0 ||
+      apex.item('P1_FRECUENCY').value.length>0 ||
+      apex.item('P1_IMPORTANCE').value.length>0  ||
+      apex.item('P1_STATUS').value.length>0 ||
+      apex.item('P1_START_DATE').value.length>0  ||
+      apex.item('P1_END_DATE').value.length>0 
+
+  actions: 
+  - # ====== Action: Submit Page =================================
+    id: 38810026785701851811
+    identification: 
+      action: Submit Page
+
+    settings: 
+      request-/-button-name: Save
+      show-processing: true
+
+    execution: 
+      sequence: 10
+      event: Submit habit # 38810026682374851810
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Initialize form Tus hábitos ================
+  id: 38727706167655953637
+  identification: 
+    name: Initialize form Tus hábitos
+    type: Form - Initialization
+    execution-chain: None
+    form-region: New habit # 38727706071579953636
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Insert habit ===============================
+  id: 38810026888736851812
+  identification: 
+    name: Insert habit
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: New habit # 38727706071579953636
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: 'Saved! :0'
+
+  error: 
+    display-location: Inline in Notification
+

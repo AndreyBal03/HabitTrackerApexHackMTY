@@ -1,0 +1,584 @@
+---
+# ====== Page: HABIT_LOGS ====================================
+id: 19
+identification: 
+  name: HABIT_LOGS
+  alias: HABIT-LOGS
+  title: HABIT_LOGS
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: ALREADY DONE ================================
+  id: 38835920995726694125
+  identification: 
+    name: ALREADY DONE
+    type: Column Toggle Report
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SM_FOLLOWS
+    include-rowid-column: false
+    where-clause: |
+      DONE = 'YES'
+      AND USER_ID = APEX_UTIL.GET_CURRENT_USER_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      layout-options: 'STRIPE:STROKE'
+
+    heading: 
+      type: Custom Headings
+
+  columns: 
+  - # ====== Column: ID ==========================================
+    id: 38835921030945694126
+    identification: 
+      column-name: ID
+      show: false
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    layout: 
+      sequence: 10
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: HABIT_ID ====================================
+    id: 38835921131757694127
+    identification: 
+      column-name: HABIT_ID
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Habit Id
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FOLLOW_DATE =================================
+    id: 38835921372632694129
+    identification: 
+      column-name: FOLLOW_DATE
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Follow Date
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DONE ========================================
+    id: 38835921461363694130
+    identification: 
+      column-name: DONE
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Done
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED =====================================
+    id: 38835921559426694131
+    identification: 
+      column-name: CREATED
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Created
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 38835921656418694132
+    identification: 
+      column-name: CREATED_BY
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: UPDATED =====================================
+    id: 38835921771192694133
+    identification: 
+      column-name: UPDATED
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Updated
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: UPDATED_BY ==================================
+    id: 38835921804670694134
+    identification: 
+      column-name: UPDATED_BY
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Updated By
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_ID =====================================
+    id: 38835921920459694135
+    identification: 
+      column-name: USER_ID
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: User Id
+      alignment: end
+
+    layout: 
+      sequence: 100
+      column-alignment: end
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: PENDENT TASKS ===============================
+  id: 38835922068558694136
+  identification: 
+    name: PENDENT TASKS
+    type: Column Toggle Report
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SM_FOLLOWS
+    include-rowid-column: false
+    where-clause: |
+      DONE = 'NO'
+      AND USER_ID = APEX_UTIL.GET_CURRENT_USER_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      layout-options: 'STRIPE:STROKE'
+
+    heading: 
+      type: Custom Headings
+
+  columns: 
+  - # ====== Column: ID ==========================================
+    id: 38835922195538694137
+    identification: 
+      column-name: ID
+      show: false
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    layout: 
+      sequence: 10
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: HABIT_ID ====================================
+    id: 38835922266012694138
+    identification: 
+      column-name: HABIT_ID
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Habit Id
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FOLLOW_DATE =================================
+    id: 38835922341796694139
+    identification: 
+      column-name: FOLLOW_DATE
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Follow Date
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DONE ========================================
+    id: 38835922432692694140
+    identification: 
+      column-name: DONE
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Done
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED =====================================
+    id: 38835922507475694141
+    identification: 
+      column-name: CREATED
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Created
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 38835922647068694142
+    identification: 
+      column-name: CREATED_BY
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: UPDATED =====================================
+    id: 38835922707915694143
+    identification: 
+      column-name: UPDATED
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Updated
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: UPDATED_BY ==================================
+    id: 38835922885388694144
+    identification: 
+      column-name: UPDATED_BY
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: Updated By
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_ID =====================================
+    id: 38835922945251694145
+    identification: 
+      column-name: USER_ID
+      show: true
+
+    settings: 
+      type: Plain Text
+      value-identifies-row: false
+      priority: 1 - Hide Last
+
+    heading: 
+      heading: User Id
+      alignment: end
+
+    layout: 
+      sequence: 90
+      column-alignment: end
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Breadcrumb ==================================
+  id: 38878645291489106490
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 38770727316539744933
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+

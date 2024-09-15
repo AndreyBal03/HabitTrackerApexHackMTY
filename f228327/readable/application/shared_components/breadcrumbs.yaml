@@ -1,0 +1,119 @@
+---
+- # ====== Breadcrumb: Breadcrumb ==============================
+  id: 38770727316539744933
+  identification: 
+    name: Breadcrumb
+
+  entries: 
+  - # ====== Entry: Home =========================================
+    id: 38770727565581744933
+    identification: 
+      name: Home
+      page-number: 1
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+        page: 1 # Home
+
+  - # ====== Entry: Follow =======================================
+    id: 38771142318219745870
+    identification: 
+      name: Follow
+      page-number: 4
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:4:&APP_SESSION.::&DEBUG.:::'
+        page: 4 # Follow habits
+
+  - # ====== Entry: Tus hábitos ==================================
+    id: 38771778016024794957
+    identification: 
+      name: Tus hábitos
+      page-number: 6
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:6:&APP_SESSION.::&DEBUG.:::'
+        page: 6 # My habits
+
+  - # ====== Entry: History ======================================
+    id: 38826066252465405042
+    identification: 
+      name: History
+      page-number: 7
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:7:&APP_SESSION.::&DEBUG.:::'
+        page: 7 # History
+
+  - # ====== Entry: Rank =========================================
+    id: 38854659284875263673
+    identification: 
+      name: Rank
+      page-number: 13
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:13:&APP_SESSION.::&DEBUG.:::'
+        page: 13 # Rank
+
+  - # ====== Entry: HABIT_LOGS ===================================
+    id: 38878645768922106491
+    identification: 
+      name: HABIT_LOGS
+      page-number: 19
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:19:&APP_SESSION.::&DEBUG.:::'
+        page: 19 # HABIT_LOGS
+
+  - # ====== Entry: Calendar =====================================
+    id: 38886674610980667140
+    identification: 
+      name: Calendar
+      page-number: 20
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:20:&APP_SESSION.::&DEBUG.:::'
+        page: 20 # Calendar
+
+  - # ====== Entry: Friends ======================================
+    id: 38896602574144955179
+    identification: 
+      name: Friends
+      page-number: 21
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:21:&APP_SESSION.::&DEBUG.:::'
+        page: 21 # Friends
+

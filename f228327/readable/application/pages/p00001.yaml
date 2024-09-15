@@ -1,0 +1,246 @@
+---
+# ====== Page: Home ==========================================
+id: 1
+identification: 
+  name: Home
+  alias: HOME
+  title: Db Habits
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    apex.actions.add([{
+        name: "like",
+        action: (event, element, args) => {
+            apex.items.P1_ACTION_ID.value = args.id;
+            apex.event.trigger(document, 'action-like');
+        }
+    }]);
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Timeline ====================================
+  id: 38445067326071585534
+  identification: 
+    name: Timeline
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select
+       p.id,
+       p.created_by AS user_name,
+       p.description AS comment_text,
+       p.picture,
+       p.file_mime,
+      
+       apex_util.get_since(p.created) post_date,
+      
+       (
+           select count(*) from SM_REACTIONS smr
+           where smr.post_id=p.id
+       ) as REACTIONS,
+      
+       (
+           select 'user-has-liked' from SM_REACTIONS smr
+           where smr.post_id=p.id and created_by=:APP_USER
+       ) USER_REACTION_CSS
+      
+       from SM_HABITS p
+       where p.status = 'Public'
+      
+      
+       order by p.created desc
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - t-Chat
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: timeline
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 38445067478209585535
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    card: 
+      primary-key-column-1: ID
+
+    title: 
+      advanced-formatting: false
+      column: USER_NAME
+
+    subtitle: 
+      advanced-formatting: false
+      column: POST_DATE
+
+    body: 
+      advanced-formatting: false
+      column: COMMENT_TEXT
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Initials
+      icon-column: USER_NAME
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: BLOB Column
+      blob-column: PICTURE
+      position: First
+      appearance: Widescreen
+      sizing: Cover
+      css-classes: 
+      - selectDisable
+      image-description: '&COMMENT_TEXT.'
+
+    blob-attributes: 
+      mime-type-column: FILE_MIME
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+dynamic-actions: 
+- # ====== Dynamic Action: action-like =========================
+  id: 38445068153586585542
+  identification: 
+    name: action-like
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Custom
+    custom-event: action-like
+    selection-type: JavaScript Expression
+    javascript-expression: document
+
+  actions: 
+  - # ====== Action: LIKE - update UI (adjust count + heart color)
+    id: 38445068257353585543
+    identification: 
+      name: LIKE - update UI (adjust count + heart color)
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        const button = $('[data-id="'+ apex.items.P1_ACTION_ID.value +'"] .js-heart-button'); // get the card
+        
+            const label = button.find('.a-CardView-buttonLabel'); // get the likes count section
+        
+            const icon = button.find('.a-CardView-buttonIcon'); // gets the element if its liked already
+        
+            let likeCount = label.text(); // get the like count
+        
+            if (icon.hasClass('user-has-liked')) {
+                // user has liked this already, and they are unliking it now -- decrement
+                label.text(--likeCount);
+        
+            } else {
+                // user is liking the post -- increment
+                label.text(++likeCount);
+            }
+        
+            icon.toggleClass('user-has-liked'); // either add this class or remove it
+
+    execution: 
+      sequence: 10
+      event: action-like # 38445068153586585542
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: LIKE -- do database work ====================
+    id: 38445068365255585544
+    identification: 
+      name: LIKE -- do database work
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        begin
+            -- try to store this posts' reaction from this user
+            insert into SM_REACTIONS (post_id, reaction, lat, lon)
+                values (:P1_ACTION_ID, 'LIKED', :P1_LAT, :P1_LON);
+            exception when dup_val_on_index then
+                -- remove it as it already existed
+                delete from SM_REACTIONS where
+                    post_id=:P1_ACTION_ID and created_by=:APP_USER;
+            end;
+      items-to-submit: 
+      - P1_LAT
+      - P1_LON
+
+    execution: 
+      sequence: 20
+      event: action-like # 38445068153586585542
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+

@@ -1,0 +1,62 @@
+---
+- # ====== Static Application File: icons/app-icon-32.png ======
+  id: 38771085100672745166
+  identification: 
+    file-name: icons/app-icon-32.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-144-rounded.p
+  id: 38771085485263745166
+  identification: 
+    file-name: icons/app-icon-144-rounded.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-192.png =====
+  id: 38771085747583745167
+  identification: 
+    file-name: icons/app-icon-192.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-256-rounded.p
+  id: 38771086047323745167
+  identification: 
+    file-name: icons/app-icon-256-rounded.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-512.png =====
+  id: 38771086301051745168
+  identification: 
+    file-name: icons/app-icon-512.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: app-228327-logo.jpeg =======
+  id: 38891276690882814312
+  identification: 
+    file-name: app-228327-logo.jpeg
+
+  attributes: 
+    mime-type: image/jpeg
+
+- # ====== Static Application File: app-228327-logo.jpg ========
+  id: 38956418218095486338
+  identification: 
+    file-name: app-228327-logo.jpg
+
+  attributes: 
+    mime-type: image/jpeg
+

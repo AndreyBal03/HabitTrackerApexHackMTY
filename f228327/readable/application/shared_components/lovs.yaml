@@ -1,0 +1,22 @@
+---
+- # ====== List of Values: SM_HABITS.NAME ======================
+  id: 38771125623083745856
+  identification: 
+    name: SM_HABITS.NAME
+
+  subscription: 
+    version-number: 15569756488018
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SM_HABITS
+    where-clause: 'CREATED_BY = :APP_USER'
+
+  column-mapping: 
+    return: ID
+    display: NAME
+    default-sort: NAME
+    sort-direction: Ascending (Nulls Last)
+
